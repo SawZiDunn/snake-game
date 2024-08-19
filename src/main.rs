@@ -1,3 +1,6 @@
+#![allow(unused_must_use)]
+#![allow(dead_code)]
+
 use std::{
     io::{stdout, Write},
     process,
@@ -337,13 +340,13 @@ fn main() {
                 }
             }
 
-            if snake.body.len() + 1 == 15 {
+            if snake.body.len() + 1 == 10 {
                 snake.move_snake(true); // Grow the snake one last time before winning
                                         // clear_screen();
                 win(); // Display the "You Win!" message
                 break; // Exit the game loop
             }
-        } else if hit_wall && snake.body.len() < 15 {
+        } else if hit_wall && snake.body.len() < 10 {
             break;
         }
 
@@ -370,7 +373,7 @@ fn main() {
         snake.move_snake(will_grow);
     }
 
-    if snake.body.len() >= 15 {
+    if snake.body.len() >= 10 {
         win();
     } else {
         print_game_over_screen();
