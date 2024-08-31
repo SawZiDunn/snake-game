@@ -281,10 +281,10 @@ fn main() {
         Color::Red,
         rng.gen_range(1..WIDTH),
         rng.gen_range(1..HEIGHT),
-        10000,
+        7000,
     );
 
-    let mut last_bomb_time = std::time::Instant::now();
+    let mut last_bomb_time = std::time::Instant::now(); // getting current time
 
     loop {
         clear_screen();
@@ -334,7 +334,6 @@ fn main() {
             loop {
                 food.x = rng.gen_range(1..WIDTH);
                 food.y = rng.gen_range(1..HEIGHT);
-
                 if !snake.body.iter().any(|item| check_collision(&item, &food)) {
                     break;
                 }
@@ -342,7 +341,6 @@ fn main() {
 
             if snake.body.len() + 1 == 10 {
                 snake.move_snake(true); // Grow the snake one last time before winning
-                                        // clear_screen();
                 win(); // Display the "You Win!" message
                 break; // Exit the game loop
             }
@@ -351,16 +349,16 @@ fn main() {
         }
 
         if hit_bomb {
-            // Decrease snake length by 1
             if snake.body.len() > 1 {
+                // Decrease snake length by 1
                 snake.body.pop();
                 bomb.hide_bomb();
             } else {
                 break;
             }
         }
-        // check collision with the snake itself
-        let collide = snake
+
+        let collide = snake // check collision with the snake itself
             .body
             .iter()
             .enumerate()
@@ -374,6 +372,7 @@ fn main() {
     }
 
     if snake.body.len() >= 10 {
+        // defining win state
         win();
     } else {
         print_game_over_screen();
