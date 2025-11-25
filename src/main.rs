@@ -1,5 +1,4 @@
 #![allow(unused_must_use)]
-#![allow(dead_code)]
 
 use std::{
     io::{stdout, Write},
@@ -229,28 +228,20 @@ fn print_status(hp: i32) {
     stdout().flush().unwrap()
 }
 
-fn win() {
-    queue!(
-        stdout(),
-        cursor::MoveTo((WIDTH / 2) - 5, HEIGHT / 2 - 1),
-        SetForegroundColor(Color::Green),
-        Print("You Win!"),
-        cursor::MoveTo((WIDTH / 2) - 6, HEIGHT / 2),
-        SetForegroundColor(Color::White),
-        Print("r - Restart"),
-        cursor::MoveTo((WIDTH / 2) - 5, (HEIGHT / 2) + 1),
-        Print("Esc - Quit")
-    )
-    .unwrap();
-    stdout().flush().unwrap();
-}
+fn win_or_lose(flag: bool) {
+    let mut color: Color = Color::Green;
+    let result = if flag == true {
+        String::from("You Win!")
+    } else {
+        color = Color::Red;
+        String::from("Game Over!")
+    };
 
-fn print_game_over_screen() {
     queue!(
         stdout(),
         cursor::MoveTo((WIDTH / 2) - 5, HEIGHT / 2 - 1),
-        SetForegroundColor(Color::Red),
-        Print("GAME OVER"),
+        SetForegroundColor(color),
+        Print(result),
         cursor::MoveTo((WIDTH / 2) - 6, HEIGHT / 2),
         SetForegroundColor(Color::White),
         Print("r - Restart"),
@@ -299,7 +290,7 @@ fn main() {
         }
 
         // Randomly reappear the bomb after a certain duration
-        if !bomb.visible && rng.gen_bool(0.01) {
+        if !bomb.visible {
             bomb.reset_bomb(rng.gen_range(1..WIDTH), rng.gen_range(1..HEIGHT));
             last_bomb_time = std::time::Instant::now();
         }
@@ -332,8 +323,8 @@ fn main() {
 
         if will_grow {
             loop {
-                food.x = rng.gen_range(1..WIDTH);
-                food.y = rng.gen_range(1..HEIGHT);
+                food.x = rng.gen_range(2..WIDTH);
+                food.y = rng.gen_range(2..HEIGHT);
                 if !snake.body.iter().any(|item| check_collision(&item, &food)) {
                     break;
                 }
@@ -341,7 +332,7 @@ fn main() {
 
             if snake.body.len() + 1 == 10 {
                 snake.move_snake(true); // Grow the snake one last time before winning
-                win(); // Display the "You Win!" message
+                win_or_lose(true); // Display the "You Win!" message
                 break; // Exit the game loop
             }
         } else if hit_wall && snake.body.len() < 10 {
@@ -371,12 +362,8 @@ fn main() {
         snake.move_snake(will_grow);
     }
 
-    if snake.body.len() >= 10 {
-        // defining win state
-        win();
-    } else {
-        print_game_over_screen();
-    }
+    // defining win_or_lose state
+    win_or_lose(snake.body.len() >= 10);
 
     loop {
         if let Event::Key(key) = event::read().unwrap() {

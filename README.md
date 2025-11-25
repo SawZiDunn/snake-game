@@ -9,6 +9,10 @@ Phone Myat Pyae Sone - Email: 67011642@kmitl.ac.th
 ## Usage
 
 ```
+$ cargo build
+```
+
+```
 $ cargo run
 ```
 
