@@ -6,6 +6,17 @@ Saw Zi Dunn - Email: 67011653@kmitl.ac.th
 
 Phone Myat Pyae Sone - Email: 67011642@kmitl.ac.th
 
+## Screenshot
+
+![alt text](demos/1.png)
+![alt text](demos/2.png)
+
+## Technologies Used
+
+-   Rust
+-   Cargo
+-   Crossterm Crate
+
 ## Usage
 
 ```
